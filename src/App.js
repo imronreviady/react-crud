@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import ListItem from './ListItem';
 
 class App extends Component {
   constructor() {
@@ -9,6 +10,7 @@ class App extends Component {
 
     this.state = {
       newTodo: '',
+      notification: null,
       editing: false,
       editingIndex: null,
       todos: [{
@@ -21,6 +23,8 @@ class App extends Component {
         id: 4, name: 'Watch bahdcasts'
       }]
     };
+
+    this.alert = this.alert.bind(this);
 
     this.addTodo = this.addTodo.bind(this);
 
@@ -62,6 +66,7 @@ class App extends Component {
       todos: todos,
       newTodo: ''
     });
+    this.alert('Todo added successfully');
   }
 
   editTodo(index) {
@@ -84,6 +89,7 @@ class App extends Component {
     todos[this.state.editingIndex] = todo;
 
     this.setState({ todos, editing: false, editingIndex: null, newTodo: '' });
+    this.alert('Todo updated successfully');
   }
 
   deleteTodo(index) {
@@ -92,6 +98,19 @@ class App extends Component {
     delete todos[index];
 
     this.setState({todos});
+    this.alert('Todo deleted successfully');
+  }
+
+  alert(notification) {
+    this.setState({
+      notification
+    });
+
+    setTimeout(() => {
+      this.setState({
+        notification: null
+      });
+    }, 2000);
   }
 
   render() {
@@ -103,6 +122,12 @@ class App extends Component {
           <h1 className="App-title">CRUD REACT</h1>
         </header>
         <div className="container">
+          {
+            this.state.notification &&
+            <div className="alert mt-3 alert-success">
+              <p className="texta-center">{this.state.notification}</p>
+            </div>
+          }
           <input type="text" name="todo" className="my-4 form-control" placeholder="Add a new todo" onChange={this.handleChange} value={this.state.newTodo} />
           <button onClick={this.state.editing ? this.updateTodo : this.addTodo} className="btn-info mb-3 form-control">
             {this.state.editing ? 'Update todo' : 'Add todo'}
@@ -111,11 +136,12 @@ class App extends Component {
             !this.state.editing &&
             <ul className="list-group">
               {this.state.todos.map((item, index) => {
-                return <li key={item.id} className="list-group-item">
-                  {item.name}
-                  <button className="btn-sm ml-4 btn btn-info" onClick={() => { this.editTodo(index); }}>U</button>
-                  <button className="btn-sm ml-1 btn btn-danger" onClick={() => { this.deleteTodo(index); }}>X</button>
-                </li>
+                return <ListItem
+                  key={item.id}
+                  item={item}
+                  editTodo={() => { this.editTodo(index); }}
+                  deleteTodo={() => { this.deleteTodo(index); }}
+                />;
               })}
             </ul>
           }
