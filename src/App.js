@@ -129,7 +129,7 @@ class App extends Component {
             </div>
           }
           <input type="text" name="todo" className="my-4 form-control" placeholder="Add a new todo" onChange={this.handleChange} value={this.state.newTodo} />
-          <button onClick={this.state.editing ? this.updateTodo : this.addTodo} className="btn-info mb-3 form-control">
+          <button onClick={this.state.editing ? this.updateTodo : this.addTodo} className="btn-success mb-3 form-control" disabled={this.state.newTodo.length < 5}>
             {this.state.editing ? 'Update todo' : 'Add todo'}
           </button>
           {
