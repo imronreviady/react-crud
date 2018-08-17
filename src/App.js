@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { Component } from 'react';
 import logo from './logo.svg';
+import loadingGif from './loading.gif';
 import './App.css';
 import ListItem from './ListItem';
 
@@ -14,7 +15,8 @@ class App extends Component {
       notification: null,
       editing: false,
       editingIndex: null,
-      todos: []
+      todos: [],
+      loading: true
     };
 
     this.apiUrl = 'https://5b77445e3ce04b00146a53e3.mockapi.io';
@@ -32,10 +34,13 @@ class App extends Component {
 
   async componentDidMount() {
     const response = await axios.get(`${this.apiUrl}/todos`);
-    console.log(response);
-    this.setState({
-      todos: response.data
-    });
+
+    setTimeout(() => {
+      this.setState({
+        todos: response.data,
+        loading: false
+      });
+    }, 1000);
   }
 
   handleChange(event) {
@@ -130,7 +135,11 @@ class App extends Component {
             {this.state.editing ? 'Update todo' : 'Add todo'}
           </button>
           {
-            !this.state.editing &&
+            this.state.loading &&
+            <img src={loadingGif} alt=""/>
+          }
+          {
+            (!this.state.editing || this.state.loading) &&
             <ul className="list-group">
               {this.state.todos.map((item, index) => {
                 return <ListItem
