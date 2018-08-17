@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
@@ -13,16 +14,10 @@ class App extends Component {
       notification: null,
       editing: false,
       editingIndex: null,
-      todos: [{
-        id: 1, name: 'Play golf'
-      }, {
-        id: 2, name: 'Buy some clothes'
-      }, {
-        id: 3, name: 'Write some code'
-      }, {
-        id: 4, name: 'Watch bahdcasts'
-      }]
+      todos: []
     };
+
+    this.apiUrl = 'https://5b77445e3ce04b00146a53e3.mockapi.io';
 
     this.alert = this.alert.bind(this);
 
@@ -35,6 +30,14 @@ class App extends Component {
     this.updateTodo = this.updateTodo.bind(this);
 
     this.handleChange = this.handleChange.bind(this);
+  }
+
+  async componentDidMount() {
+    const response = await axios.get(`${this.apiUrl}/todos`);
+    console.log(response);
+    this.setState({
+      todos: response.data
+    });
   }
 
   handleChange(event) {
