@@ -83,8 +83,12 @@ class App extends Component {
     this.alert('Todo updated successfully');
   }
 
-  deleteTodo(index) {
+  async deleteTodo(index) {
     const todos = this.state.todos;
+
+    const todo = todos[index];
+
+    await axios.delete(`${this.apiUrl}/todos/${todo.id}`);
 
     delete todos[index];
 
