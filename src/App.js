@@ -10,6 +10,7 @@ class App extends Component {
     this.state = {
       newTodo: '',
       editing: false,
+      editingIndex: null,
       todos: [{
         id: 1, name: 'Play golf'
       }, {
@@ -56,12 +57,21 @@ class App extends Component {
 
     this.setState({
       editing: true,
-      newTodo: todo.name
+      newTodo: todo.name,
+      editingIndex: index
     });
   }
 
   updateTodo() {
+    const todo = this.state.todos[this.state.editingIndex];
 
+    todo.name = this.state.newTodo;
+
+    const todos = this.state.todos;
+
+    todos[this.state.editingIndex] = todo;
+
+    this.setState({ todos, editing: false, editingIndex: null, newTodo: '' });
   }
 
   deleteTodo(index) {
