@@ -9,6 +9,7 @@ class App extends Component {
 
     this.state = {
       newTodo: '',
+      editing: false,
       todos: [{
         id: 1, name: 'Play golf'
       }, {
@@ -23,6 +24,8 @@ class App extends Component {
     this.addTodo = this.addTodo.bind(this);
 
     this.deleteTodo = this.deleteTodo.bind(this);
+
+    this.updateTodo = this.updateTodo.bind(this);
 
     this.handleChange = this.handleChange.bind(this);
   }
@@ -48,6 +51,15 @@ class App extends Component {
     });
   }
 
+  updateTodo(index) {
+    const todo = this.state.todos[index];
+
+    this.setState({
+      editing: true,
+      newTodo: todo.name
+    });
+  }
+
   deleteTodo(index) {
     const todos = this.state.todos;
 
@@ -66,12 +78,15 @@ class App extends Component {
         </header>
         <div className="container">
           <input type="text" name="todo" className="my-4 form-control" placeholder="Add a new todo" onChange={this.handleChange} value={this.state.newTodo} />
-          <button onClick={this.addTodo} className="btn-info mb-3 form-control">Add todo</button>
+          <button onClick={this.addTodo} className="btn-info mb-3 form-control">
+            {this.state.editing ? 'Update todo' : 'Add todo'}
+          </button>
           <ul className="list-group">
             {this.state.todos.map((item, index) => {
               return <li key={item.id} className="list-group-item">
                 {item.name}
-                <button className="btn-sm ml-4 btn btn-danger" onClick={() => { this.deleteTodo(index); }}>X</button>
+                <button className="btn-sm ml-4 btn btn-info" onClick={() => { this.updateTodo(index); }}>U</button>
+                <button className="btn-sm ml-1 btn btn-danger" onClick={() => { this.deleteTodo(index); }}>X</button>
               </li>
             })}
           </ul>
